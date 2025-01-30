@@ -60,10 +60,6 @@ const SidebarItem = styled('li')({
     cursor: 'pointer',
     padding: '10px',
     transition: 'background-color 0.3s ease',
-    '&:hover': {
-        backgroundColor: '#2C3E50',
-        color: 'white',
-    }
 });
 
 const SidebarIcon = styled('span')({
@@ -73,6 +69,9 @@ const SidebarIcon = styled('span')({
 
 const SidebarLabel = styled('span')({
     whiteSpace: 'nowrap',
+    '&:hover': {
+        color: 'blue',
+    },
     flexGrow: 1,
 });
 
@@ -88,8 +87,8 @@ const sidebarItems = [
         label: 'Administração',
         to: '/management',
         submenu: [
-            { icon: <FaUsers />, label: 'Usuários', to: '/management/user-management' },
-            { icon: <FaKey />, label: 'Permissões', to: '/management/permissions' }
+            { label: 'Usuários', to: '/management/user-management' },
+            { label: 'Permissões', to: '/management/permissions' }
         ]
     },
     {
@@ -97,8 +96,8 @@ const sidebarItems = [
         label: 'Gestão de Dados',
         to: '/management/data-management',
         submenu: [
-            { icon: <FaServer />, label: 'Banco de Dados', to: '/management/database' },
-            { icon: <FaFileImport />, label: 'Importação', to: '/management/import' }
+            { label: 'Banco de Dados', to: '/management/database' },
+            { label: 'Importação', to: '/management/import' }
         ]
     },
     {
@@ -106,8 +105,8 @@ const sidebarItems = [
         label: 'Vendas',
         to: '/sales',
         submenu: [
-            { icon: <FaChartLine />, label: 'Relatórios', to: '/sales/reports' },
-            { icon: <FaTachometerAlt />, label: 'Dashboard', to: '/sales/dashboard' }
+            { label: 'Relatórios', to: '/sales/reports' },
+            { label: 'Dashboard', to: '/sales/dashboard' }
         ]
     }
 ];
