@@ -36,15 +36,38 @@ const App = () => {
                 {/* Instanciando o Header */}
                 {/* Wrapper para organizar Sidebar e Conteúdo Principal */}
                 <Header
-                    user="João da Silva"
+                    user="denys.gaspar@itjucas.com.br"
                 />
                 <MainContentWrapper>
                     <SidebarComponent />
                     <MainContent>
                         <Routes>
                             <Route path="/" element={<CardApps title="Página inicial" />} />
-                            <Route path="/management" element={<Management />} />
                             <Route path="/user-management" element={<UserManagement />} />
+                            <Route path="/management" element={<Management />} />
+                            <Route path="/schedule" element={<UserManagement />} />
+                            <Route path="/maintenence" element={<UserManagement />} />
+                            <Route path="/equipaments" element={<UserManagement />} />
+                            <Route path="/maintenence-order" element={<UserManagement />} />
+                            <Route path="/script" element={<UserManagement />} />
+                            <Route path="/history" element={<UserManagement />} />
+                            <Route path="/maintenence-report" element={<UserManagement />} />
+                            <Route path="/financial" element={<UserManagement />} />
+                            <Route path="/flow" element={<UserManagement />} />
+                            <Route path="/payment" element={<UserManagement />} />
+                            <Route path="/receive" element={<UserManagement />} />
+                            <Route path="/procurement" element={<UserManagement />} />
+                            <Route path="/contract" element={<UserManagement />} />
+                            <Route path="/cost-center" element={<UserManagement />} />
+                            <Route path="/products" element={<UserManagement />} />
+                            <Route path="/service" element={<UserManagement />} />
+                            <Route path="/supplier" element={<UserManagement />} />
+                            <Route path="/procurement-reports" element={<UserManagement />} />
+                            <Route path="/sales" element={<UserManagement />} />
+                            <Route path="/sale-order" element={<UserManagement />} />
+                            <Route path="/sale-proposal" element={<UserManagement />} />
+                            <Route path="/track" element={<UserManagement />} />
+                            <Route path="/sales-report" element={<UserManagement />} />
                             {/* Defina outras rotas para outros apps do módulo */}
                         </Routes>
                     </MainContent>

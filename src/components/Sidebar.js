@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { FaUserCog, FaChartBar, FaBars } from 'react-icons/fa';
+import React, { useState, useEffect } from 'react';
+import { FaUserCog, FaCalendarAlt, FaTools, FaMoneyBillWave, FaShoppingCart, FaChartLine } from 'react-icons/fa';
 import { styled } from '@mui/system';
 import { Link } from 'react-router-dom';
 
@@ -9,39 +9,27 @@ const SidebarContainer = styled('div')({
 });
 
 const Sidebar = styled('div')(({ isSidebarVisible }) => ({
+    marginTop: '35px',
     width: isSidebarVisible ? 175 : 60,
-    backgroundColor: '#FFFFFF',
-    marginTop: '50px',
-    color: '#000',
+    backgroundColor: '#232F3E',
+    color: '#ffffff',
     height: '100vh',
     padding: '10px',
     display: 'flex',
     flexDirection: 'column',
-    fontFamily: '"Inter", sans-serif', // TROQUEI A FONTE PARA POPPINS
+    fontFamily: '"Inter", sans-serif',
     position: 'fixed',
     top: 0,
     left: 0,
     transition: 'width 0.3s ease',
-    boxShadow: '2px 0 5px rgba(0,0,0,0.1)',
-    fontSize: '15px'
-}));
-
-
-const ToggleButton = styled('button')({
-    background: 'none',
-    border: 'none',
-    color: '#000',
-    fontSize: '20px',
-    cursor: 'pointer',
-    padding: '7px',
-    display: 'flex',
-});
-
-const MainContent = styled('div')(({ isSidebarVisible }) => ({
-    marginLeft: isSidebarVisible ? 250 : 60,
-    flexGrow: 1,
-    transition: 'margin-left 0.3s ease',
-    padding: 5,
+    boxShadow: '2px 0 10px rgba(0,0,0,0.2)',
+    fontSize: '12px',
+    overflowY: 'auto',
+    scrollbarWidth: 'thin',
+    scrollbarColor: '#555 #232F3E',
+    '&::-webkit-scrollbar': { width: '6px' },
+    '&::-webkit-scrollbar-thumb': { background: '#555', borderRadius: '4px' },
+    '&::-webkit-scrollbar-track': { background: '#232F3E' }
 }));
 
 const SidebarList = styled('ul')({
@@ -60,7 +48,11 @@ const SidebarItem = styled('div')({
     alignItems: 'center',
     cursor: 'pointer',
     padding: '10px',
+    borderRadius: '4px',
     transition: 'background-color 0.3s ease',
+    '&:hover': {
+        backgroundColor: '#37475A',
+    }
 });
 
 const SidebarIcon = styled('span')({
@@ -72,74 +64,118 @@ const SidebarIcon = styled('span')({
 
 const SidebarLabel = styled(Link)({
     textDecoration: 'none',
-    color: 'black',
+    color: 'white',
     whiteSpace: 'nowrap',
     '&:hover': {
-        color: 'blue',
+        color: '#FFD700',
     },
 });
 
-const Submenu = styled('ul')(({ isSidebarVisible, isVisible }) => ({
-    display: isSidebarVisible && isVisible ? 'block' : 'none',
+const Submenu = styled('ul')(({ isVisible }) => ({
+    display: isVisible ? 'block' : 'none',
     paddingLeft: 25,
     listStyle: 'none',
 }));
 
-const sidebarItems = [
-    {
-        icon: <FaUserCog />,
-        label: 'Administração',
-        to: '/management',
-        submenu: [
-            { label: 'Gestão de usuários', to: '/user-management' }
-        ]
-    },
-    {
-        icon: <FaChartBar />,
-        label: 'Vendas',
-        to: '/sales',
-        submenu: [
-            { label: 'Relatórios', to: '/sales/reports' },
-            { label: 'Dashboard', to: '/sales/dashboard' }
-        ]
-    }
-];
-
 const SidebarComponent = ({ children }) => {
     const [isSidebarVisible, setIsSidebarVisible] = useState(true);
     const [locked, setLocked] = useState(false);
-    const [openSubmenus, setOpenSubmenus] = useState(
-        Object.fromEntries(sidebarItems.map((_, index) => [index, true]))
-    );
+    const [openSubmenus, setOpenSubmenus] = useState({});
+
+    useEffect(() => {
+        const savedState = localStorage.getItem('openSubmenus');
+        if (savedState) {
+            setOpenSubmenus(JSON.parse(savedState));
+        }
+    }, []);
 
     const toggleSidebarVisibility = (visible) => {
         if (!locked) {
+            if (!visible) {
+                localStorage.setItem('openSubmenus', JSON.stringify(openSubmenus));
+                setOpenSubmenus({}); // Fecha os submenus ao ocultar o sidebar
+            } else {
+                const savedState = localStorage.getItem('openSubmenus');
+                if (savedState) {
+                    setOpenSubmenus(JSON.parse(savedState)); // Recupera o estado salvo
+                }
+            }
             setIsSidebarVisible(visible);
-            setOpenSubmenus(prev =>
-                Object.fromEntries(Object.entries(prev).map(([key, _]) => [key, visible]))
-            );
         }
     };
+
+    const toggleSubmenu = (index) => {
+        setOpenSubmenus((prev) => {
+            const newState = { ...prev, [index]: !prev[index] };
+            localStorage.setItem('openSubmenus', JSON.stringify(newState)); // Salva estado
+            return newState;
+        });
+    };
+
+    const sidebarItems = [
+        {
+            icon: <FaUserCog />, label: 'Administração', to: '/management',
+            submenu: [{ label: 'Gestão de usuários', to: '/user-management' }]
+        },
+        {
+            icon: <FaShoppingCart />, label: 'Suprimentos', to: '/procurement',
+            submenu: [
+                { label: 'Contratos', to: '/contract' },
+                { label: 'Centro de custos', to: '/cost-center' },
+                { label: 'Produtos', to: '/products' },
+                { label: 'Serviços', to: '/service' },
+                { label: 'Fornecedores', to: '/supplier' },
+                { label: 'Relatórios', to: '/procurement-reports' }
+            ]
+        },
+        {
+            icon: <FaChartLine />, label: 'Vendas', to: '/sales',
+            submenu: [
+                { label: 'Pedidos', to: '/sale-order' },
+                { label: 'Propostas', to: '/sale-proposal' },
+                { label: 'Acompanhamento', to: '/track' },
+                { label: 'Relatórios', to: '/sales-report' }
+            ]
+        },
+        {
+            icon: <FaTools />, label: 'Manutenção', to: '/maintenance',
+            submenu: [
+                { label: 'Equipamentos', to: '/equipments' },
+                { label: 'Ordem de manutenção', to: '/maintenance-order' },
+                { label: 'Roteiros', to: '/script' },
+                { label: 'Histórico', to: '/history' },
+                { label: 'Relatórios', to: '/maintenance-report' }
+            ]
+        },
+        {
+            icon: <FaMoneyBillWave />, label: 'Financeiro', to: '/financial',
+            submenu: [
+                { label: 'Fluxo', to: '/flow' },
+                { label: 'Pagamentos', to: '/payment' },
+                { label: 'Recebimentos', to: '/receive' }
+            ]
+        },
+        {
+            icon: <FaCalendarAlt />, label: 'Agenda', to: '/schedule'
+        }
+    ];
 
     return (
         <SidebarContainer>
             <div
-                onMouseEnter={() => toggleSidebarVisibility(true)}
-                onMouseLeave={() => toggleSidebarVisibility(false)}
+            // onMouseEnter={() => !locked && toggleSidebarVisibility(true)}
+            // onMouseLeave={() => !locked && toggleSidebarVisibility(false)}
             >
                 <Sidebar isSidebarVisible={isSidebarVisible}>
-                    <ToggleButton onClick={() => setLocked(!locked)}>
-                        <FaBars />
-                    </ToggleButton>
                     <SidebarList>
                         {sidebarItems.map((item, index) => (
                             <SidebarItemWrapper key={index}>
-                                <SidebarItem>
+                                <SidebarItem onClick={() => item.submenu && toggleSubmenu(index)}>
                                     <SidebarIcon>{item.icon}</SidebarIcon>
                                     {isSidebarVisible && <SidebarLabel to={item.to}>{item.label}</SidebarLabel>}
                                 </SidebarItem>
                                 {item.submenu && (
-                                    <Submenu isSidebarVisible={isSidebarVisible} isVisible={openSubmenus[index]}>
+                                    <Submenu isVisible={isSidebarVisible && openSubmenus[index]}>
                                         {item.submenu.map((subItem, subIndex) => (
                                             <SidebarItem key={subIndex} style={{ paddingLeft: '20px' }}>
                                                 <SidebarLabel to={subItem.to}>{subItem.label}</SidebarLabel>
@@ -152,7 +188,9 @@ const SidebarComponent = ({ children }) => {
                     </SidebarList>
                 </Sidebar>
             </div>
-            <MainContent isSidebarVisible={isSidebarVisible}>{children}</MainContent>
+            <main style={{ marginLeft: isSidebarVisible ? '175px' : '60px', transition: 'margin-left 0.3s ease', padding: '10px' }}>
+                {children}
+            </main>
         </SidebarContainer>
     );
 };
