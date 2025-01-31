@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FaUserCog, FaDatabase, FaChartBar, FaBars, FaUsers, FaKey, FaServer, FaFileImport, FaChartLine, FaTachometerAlt } from 'react-icons/fa';
+import { FaUserCog, FaChartBar, FaBars } from 'react-icons/fa';
 import { styled } from '@mui/system';
 import { Link } from 'react-router-dom';
 
@@ -9,7 +9,7 @@ const SidebarContainer = styled('div')({
 });
 
 const Sidebar = styled('div')(({ isSidebarVisible }) => ({
-    width: isSidebarVisible ? 250 : 60,
+    width: isSidebarVisible ? 175 : 60,
     backgroundColor: '#FFFFFF',
     marginTop: '50px',
     color: '#000',
@@ -17,46 +17,47 @@ const Sidebar = styled('div')(({ isSidebarVisible }) => ({
     padding: '10px',
     display: 'flex',
     flexDirection: 'column',
-    fontFamily: 'Arial, sans-serif',
+    fontFamily: '"Inter", sans-serif', // TROQUEI A FONTE PARA POPPINS
     position: 'fixed',
     top: 0,
     left: 0,
     transition: 'width 0.3s ease',
-    boxShadow: '2px 0 5px rgba(0,0,0,0.1)'
+    boxShadow: '2px 0 5px rgba(0,0,0,0.1)',
+    fontSize: '15px'
 }));
 
-const ToggleButton = styled('button')(({ isSidebarVisible }) => ({
+
+const ToggleButton = styled('button')({
     background: 'none',
     border: 'none',
     color: '#000',
     fontSize: '20px',
     cursor: 'pointer',
-    padding: '10px',
-    alignSelf: 'center',
+    padding: '7px',
     display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-}));
+});
 
 const MainContent = styled('div')(({ isSidebarVisible }) => ({
     marginLeft: isSidebarVisible ? 250 : 60,
     flexGrow: 1,
     transition: 'margin-left 0.3s ease',
-    padding: 20,
+    padding: 5,
 }));
 
 const SidebarList = styled('ul')({
     padding: 0,
-    marginTop: 20,
+    marginTop: 10,
     listStyle: 'none',
 });
 
-const SidebarItem = styled('li')({
-    margin: '10px 0',
+const SidebarItemWrapper = styled('li')({
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'flex-start',
-    fontSize: '16px',
+});
+
+const SidebarItem = styled('div')({
+    display: 'flex',
+    alignItems: 'center',
     cursor: 'pointer',
     padding: '10px',
     transition: 'background-color 0.3s ease',
@@ -65,19 +66,22 @@ const SidebarItem = styled('li')({
 const SidebarIcon = styled('span')({
     fontSize: '20px',
     marginRight: '10px',
+    display: 'flex',
+    alignItems: 'center',
 });
 
-const SidebarLabel = styled('span')({
+const SidebarLabel = styled(Link)({
+    textDecoration: 'none',
+    color: 'black',
     whiteSpace: 'nowrap',
     '&:hover': {
         color: 'blue',
     },
-    flexGrow: 1,
 });
 
-const Submenu = styled('ul')(({ isVisible }) => ({
-    display: isVisible ? 'block' : 'none',
-    paddingLeft: 20,
+const Submenu = styled('ul')(({ isSidebarVisible, isVisible }) => ({
+    display: isSidebarVisible && isVisible ? 'block' : 'none',
+    paddingLeft: 25,
     listStyle: 'none',
 }));
 
@@ -87,17 +91,7 @@ const sidebarItems = [
         label: 'Administração',
         to: '/management',
         submenu: [
-            { label: 'Usuários', to: '/management/user-management' },
-            { label: 'Permissões', to: '/management/permissions' }
-        ]
-    },
-    {
-        icon: <FaDatabase />,
-        label: 'Gestão de Dados',
-        to: '/management/data-management',
-        submenu: [
-            { label: 'Banco de Dados', to: '/management/database' },
-            { label: 'Importação', to: '/management/import' }
+            { label: 'Gestão de usuários', to: '/user-management' }
         ]
     },
     {
@@ -114,17 +108,17 @@ const sidebarItems = [
 const SidebarComponent = ({ children }) => {
     const [isSidebarVisible, setIsSidebarVisible] = useState(true);
     const [locked, setLocked] = useState(false);
-    const [openSubmenus, setOpenSubmenus] = useState({});
+    const [openSubmenus, setOpenSubmenus] = useState(
+        Object.fromEntries(sidebarItems.map((_, index) => [index, true]))
+    );
 
     const toggleSidebarVisibility = (visible) => {
-        if (!locked) setIsSidebarVisible(visible);
-    };
-
-    const toggleSubmenu = (index) => {
-        setOpenSubmenus((prev) => ({
-            ...prev,
-            [index]: !prev[index],
-        }));
+        if (!locked) {
+            setIsSidebarVisible(visible);
+            setOpenSubmenus(prev =>
+                Object.fromEntries(Object.entries(prev).map(([key, _]) => [key, visible]))
+            );
+        }
     };
 
     return (
@@ -139,20 +133,21 @@ const SidebarComponent = ({ children }) => {
                     </ToggleButton>
                     <SidebarList>
                         {sidebarItems.map((item, index) => (
-                            <SidebarItem key={index} onClick={() => toggleSubmenu(index)}>
-                                <SidebarIcon>{item.icon}</SidebarIcon>
-                                {isSidebarVisible && <SidebarLabel>{item.label}</SidebarLabel>}
+                            <SidebarItemWrapper key={index}>
+                                <SidebarItem>
+                                    <SidebarIcon>{item.icon}</SidebarIcon>
+                                    {isSidebarVisible && <SidebarLabel to={item.to}>{item.label}</SidebarLabel>}
+                                </SidebarItem>
                                 {item.submenu && (
-                                    <Submenu isVisible={openSubmenus[index]}>
+                                    <Submenu isSidebarVisible={isSidebarVisible} isVisible={openSubmenus[index]}>
                                         {item.submenu.map((subItem, subIndex) => (
-                                            <SidebarItem key={subIndex}>
-                                                <SidebarIcon>{subItem.icon}</SidebarIcon>
-                                                <SidebarLabel>{subItem.label}</SidebarLabel>
+                                            <SidebarItem key={subIndex} style={{ paddingLeft: '20px' }}>
+                                                <SidebarLabel to={subItem.to}>{subItem.label}</SidebarLabel>
                                             </SidebarItem>
                                         ))}
                                     </Submenu>
                                 )}
-                            </SidebarItem>
+                            </SidebarItemWrapper>
                         ))}
                     </SidebarList>
                 </Sidebar>

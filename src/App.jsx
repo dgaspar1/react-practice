@@ -3,7 +3,8 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import SidebarComponent from './components/Sidebar';
 import CardApps from './components/CardApps';
 import Header from './components/Header'; // Importação do Header
-import Management from './modules/management/user-management'; // Importa a página de user-management
+import Management from './modules/management'; // Importa a página de user-management
+import UserManagement from './modules/management/user-management'; // Importa a página de user-management
 import { styled } from '@mui/system';
 
 const AppContainer = styled('div')({
@@ -42,7 +43,8 @@ const App = () => {
                     <MainContent>
                         <Routes>
                             <Route path="/" element={<CardApps title="Página inicial" />} />
-                            <Route path="/management/user-management" element={<Management />} />
+                            <Route path="/management" element={<Management />} />
+                            <Route path="/user-management" element={<UserManagement />} />
                             {/* Defina outras rotas para outros apps do módulo */}
                         </Routes>
                     </MainContent>
