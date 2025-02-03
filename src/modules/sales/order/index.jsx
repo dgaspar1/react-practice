@@ -1,6 +1,6 @@
 import React from 'react';
 import { styled } from '@mui/system';
-import CardApps from '../../../components/CardApps'; // Assumindo que o CardApps está dentro de components
+import CardApps from '../../../components/Card'; // Assumindo que o CardApps está dentro de components
 import { Link } from 'react-router-dom';
 
 const PageContainer = styled('div')({

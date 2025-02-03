@@ -1,33 +1,19 @@
 import React from 'react';
 import { styled } from '@mui/system';
-import CardApps from '../../components/Card';
+import CardApps from '../../../components/Card';
 import { Link } from 'react-router-dom';
+
 
 // JSON manual representando os apps no módulo "management"
 const apps = [
     {
-        name: "Gestão de contratos",
-        path: "/procurement/contract"
-    },
-    {
-        name: "Cadastro de fornecedores",
-        path: "/procurement/supplier"
-    },
-    {
-        name: "Gestão de produtos",
-        path: "/procurement/product"
-    },
-    {
-        name: "Gestão de serviços",
-        path: "/procurement/service"
-    },
-    {
-        name: "Gestão de centro de custos",
-        path: "/procurement/cost-center"
+        name: "Gestão de usuários",
+        path: "/user-management"
     }
 ];
 
 const PageContainer = styled('div')({
+    marginTop: '50px',
     display: 'flex',
     flexDirection: 'column',
     gap: 20,
@@ -48,10 +34,10 @@ const CardText = styled('p')({
     fontFamily: '"Open Sans", sans-serif',
 });
 
-const Management = () => {
+const Equipment = () => {
     return (
         <PageContainer>
-            <PageTitle>Painel de suprimentos</PageTitle>
+            <PageTitle>Painel de administração</PageTitle>
 
             <CardApps title="Apps recentes">
                 <CardText>
@@ -67,9 +53,8 @@ const Management = () => {
                     </CardText>
                 ))}
             </CardApps>
-            <CardApps title="Relatórios" />
         </PageContainer>
     );
 };
 
-export default Management;
+export default Equipment;

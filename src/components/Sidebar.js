@@ -115,17 +115,17 @@ const SidebarComponent = ({ children }) => {
     const sidebarItems = [
         {
             icon: <FaUserCog />, label: 'Administração', to: '/management',
-            submenu: [{ label: 'Gestão de usuários', to: '/user-management' }]
+            submenu: [{ label: 'Gestão de usuários', to: '/management/user' }]
         },
         {
             icon: <FaShoppingCart />, label: 'Suprimentos', to: '/procurement',
             submenu: [
-                { label: 'Contratos', to: '/contract' },
-                { label: 'Centro de custos', to: '/cost-center' },
-                { label: 'Produtos', to: '/products' },
-                { label: 'Serviços', to: '/service' },
-                { label: 'Fornecedores', to: '/supplier' },
-                { label: 'Relatórios', to: '/procurement-reports' }
+                { label: 'Contratos', to: '/procurement/contract' },
+                { label: 'Centro de custos', to: '/procurement/cost-center' },
+                { label: 'Produtos', to: '/procurement/product' },
+                { label: 'Serviços', to: '/procurement/service' },
+                { label: 'Fornecedores', to: '/procurement/supplier' },
+                { label: 'Relatórios', to: '/procurement/reports' }
             ]
         },
         {

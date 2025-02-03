@@ -1,10 +1,16 @@
 import React from 'react';
 import { styled } from '@mui/system';
-import CardApps from '../../components/CardApps'; // Assumindo que o CardApps está dentro de components
+import CardApps from '../../components/Card';
 import { Link } from 'react-router-dom';
 
+const apps = [
+    {
+        name: "Gestão de usuários",
+        path: "/management/user"
+    }
+];
+
 const PageContainer = styled('div')({
-    marginTop: '50px',
     display: 'flex',
     flexDirection: 'column',
     gap: 20,
@@ -30,25 +36,19 @@ const Management = () => {
         <PageContainer>
             <PageTitle>Painel de administração</PageTitle>
 
-            {/* Exibindo os apps recentes */}
             <CardApps title="Apps recentes">
                 <CardText>
-                    <Link to="/user-management">Gestão de usuários</Link>
+                    <Link to="/management/user">Gestão de usuários</Link>
                 </CardText>
             </CardApps>
 
             {/* Exibindo todos os apps */}
             <CardApps title="Todos os apps">
-                <CardText>
-                    <Link to="/user-management">Gestão de usuários</Link>
-                </CardText>
-            </CardApps>
-
-            {/* Exibindo dashboards */}
-            <CardApps title="Dashboard">
-                <CardText>
-                    <Link to="/management/user-management/dashboard">Visão geral</Link>
-                </CardText>
+                {apps.map((app, index) => (
+                    <CardText key={index}>
+                        <a href={app.path}>{app.name}</a>
+                    </CardText>
+                ))}
             </CardApps>
         </PageContainer>
     );
